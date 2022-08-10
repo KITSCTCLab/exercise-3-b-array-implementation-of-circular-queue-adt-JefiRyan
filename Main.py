@@ -59,8 +59,6 @@ for item in input().split(','):
         data.append([int(item)])
 obj = MyCircularQueue(data[0][0])
 result = []
-print(data)
-print(operations)
 for i in range(len(operations)):
     if i == 0:
         result.append(None)
