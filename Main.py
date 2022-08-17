@@ -1,53 +1,46 @@
 class MyCircularQueue:
     def __init__(self, size: int):
+        print(size)
+        self.queue = [None]*size
         self.size = size
-        self.queue = [None] * size
-        self.rear = -1
         self.front = -1
+        self.rear = -1
+
 
     def enqueue(self, value: int) -> bool:
+        if self.queue.count(None) != 0 and self.is_full() or (self.rear < self.size - 1):
+            self.rear = (self.rear + 1) % self.size
+        else:
+            return False
 
-        if (self.is_full() == False):
-            if (self.front == -1):
+        self.queue[self.rear] = value
+        return True
+
+    def dequeue(self) -> bool:
+        self.front += 1
+        if not self.is_empty():
+            if self.front == self.size:
                 self.front = 0
-                self.rear = 0
-                self.queue[self.rear] = value
-            else:
-                self.rear = (self.rear + 1) % self.size
-                self.queue[self.rear] = value
+            self.queue[self.front] = None
             return True
         else:
             return False
 
-    def dequeue(self) -> bool:
-        if (self.is_empty() == False):
-            if (self.front == self.rear):
-                self.front = -1
-                self.rear = -1
-                return True
-            else:
-                self.front = (self.front + 1) % self.size
-                return True
-        else:
-            return False
-
     def get_front(self) -> int:
-        if (self.is_empty() == False):
+        if not self.is_empty():
             return self.queue[self.front]
-        else:
-            return -1
+        return -1
 
     def get_rear(self):
-        if (self.is_empty() == False):
+        if not self.is_empty():
             return self.queue[self.rear]
-        else:
-            return -1
+        return -1
 
     def is_empty(self):
-        return self.front == -1
+        return self.rear == -1 and self.front == -1
 
     def is_full(self):
-        return (self.rear + 1) % self.size == self.front
+        return (self.front == self.rear and self.rear != -1) or self.rear == self.size-1
 
 
 # Do not change the following code
