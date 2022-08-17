@@ -4,24 +4,26 @@ class MyCircularQueue:
         self.size = size
         self.front = -1
         self.rear = -1
-        self.gap = 0
+
 
     def enqueue(self, value: int) -> bool:
-        if self.gap > 0:
-            self.rear = 0
-        if not self.is_full():
-            self.rear += 1
-            self.queue[self.rear] = value
-            return True
-        return False
+        if self.queue.count(None) != 0 and self.is_full() or (self.rear < self.size - 1):
+            self.rear = (self.rear + 1) % self.size
+        else:
+            return False
+
+        self.queue[self.rear] = value
+        return True
 
     def dequeue(self) -> bool:
+        self.front += 1
         if not self.is_empty():
-            self.front += 1
+            if self.front == self.size:
+                self.front = 0
             self.queue[self.front] = None
-            self.gap += 1
             return True
-        return False
+        else:
+            return False
 
     def get_front(self) -> int:
         if not self.is_empty():
@@ -34,10 +36,10 @@ class MyCircularQueue:
         return -1
 
     def is_empty(self):
-        return self.rear == -1
+        return self.rear == -1 and self.front == -1
 
     def is_full(self):
-        return self.rear == self.size - 1
+        return (self.front == self.rear and self.rear != -1) or self.rear == self.size-1
 
 
 # Do not change the following code
@@ -60,7 +62,7 @@ for item in input().split(','):
 obj = MyCircularQueue(data[0][0])
 result = []
 for i in range(len(operations)):
-    if i == 0:
+    if operations[i] == "'MyCircularQueue'":
         result.append(None)
     elif operations[i] == "'enqueue'":
         result.append(obj.enqueue(data[i][0]))
